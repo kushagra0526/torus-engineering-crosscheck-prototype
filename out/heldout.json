@@ -1,0 +1,165 @@
+{
+ "split": "heldout",
+ "projects": 60,
+ "planted": 221,
+ "lookalikes": 197,
+ "aware_unread_items": 0,
+ "results": {
+  "aware": {
+   "caught": 221,
+   "missed": 0,
+   "false": 1,
+   "false_on_lookalike": 1,
+   "by_rule": {
+    "STALE_REF": 22,
+    "XFMR_OVER_ONAF": 23,
+    "CODE_EDITION": 20,
+    "RATED_FLOW_MARGIN": 22,
+    "MOTOR_MARGIN": 27,
+    "OP_TOO_CLOSE_TO_SET": 20,
+    "PSV_SET_OVER_MAWP": 17,
+    "NPSH_MARGIN": 31,
+    "PIPE_CLASS_DERATED": 21,
+    "PSV_ADDL_OVER_105": 18
+   },
+   "miss_by_rule": {}
+  },
+  "literal": {
+   "caught": 98,
+   "missed": 123,
+   "false": 227,
+   "false_on_lookalike": 154,
+   "by_rule": {
+    "XFMR_OVER_ONAF": 23,
+    "CODE_EDITION": 20,
+    "OP_TOO_CLOSE_TO_SET": 20,
+    "PSV_SET_OVER_MAWP": 17,
+    "PSV_ADDL_OVER_105": 18
+   },
+   "miss_by_rule": {
+    "STALE_REF": 22,
+    "RATED_FLOW_MARGIN": 22,
+    "MOTOR_MARGIN": 27,
+    "PIPE_CLASS_DERATED": 21,
+    "NPSH_MARGIN": 31
+   }
+  }
+ },
+ "examples": [
+  {
+   "seed": 9001,
+   "flags": [
+    {
+     "rule": "XFMR_OVER_ONAF",
+     "tag": "T-1",
+     "msg": "max demand 1,356 kVA > ONAF 1,150 kVA",
+     "cite": "load list + spec demand factors",
+     "sources": [
+      [
+       "transformers.txt",
+       "T-1: rating 1,000/1,150 kVA ONAN/ONAF"
+      ]
+     ]
+    },
+    {
+     "rule": "STALE_REF",
+     "tag": "PSV-102A",
+     "msg": "references P&ID-001 rev B, current is rev C",
+     "cite": "document register",
+     "sources": [
+      [
+       "psv_list.csv",
+       "PSV 102A,V 102,13.79 barg,process,P&ID-001 rev B"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "seed": 9002,
+   "flags": [
+    {
+     "rule": "OP_TOO_CLOSE_TO_SET",
+     "tag": "V-102",
+     "msg": "operating 421 psig > 90% of lowest set 450 psig",
+     "cite": "project spec SP-MECH-001 (operating margin)",
+     "sources": [
+      [
+       "process_datasheet.txt",
+       "V 102: normal operating pressure 29.60 kg/cm2(g)"
+      ],
+      [
+       "psv_list.csv",
+       "PSV 102A,V-102,450 psig,process,P&ID-001 rev C"
+      ]
+     ]
+    },
+    {
+     "rule": "MOTOR_MARGIN",
+     "tag": "P-101A",
+     "msg": "driver 10.5 kW < 12.4 kW required for 9.9 kW rated",
+     "cite": "API 610 driver sizing (per SP-MECH-001)",
+     "sources": [
+      [
+       "vendor_P-101A.txt",
+       "Driver rating: 10.5 kW"
+      ],
+      [
+       "vendor_P-101A.txt",
+       "Rated power: 13.3 hp"
+      ]
+     ]
+    },
+    {
+     "rule": "CODE_EDITION",
+     "tag": "P-102A",
+     "msg": "vendor API 610 11th vs spec 12th",
+     "cite": "SP-MECH-001",
+     "sources": [
+      [
+       "vendor_P-102A.txt",
+       "Design to API 610 11th Edition"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "seed": 9003,
+   "flags": [
+    {
+     "rule": "PSV_SET_OVER_MAWP",
+     "tag": "PSV-103A",
+     "msg": "set 213 psig > 100% of MAWP 200 psig (V-103)",
+     "cite": "ASME VIII-1 UG-134(a) (2019 ed.; Section XIII in 2021+)",
+     "sources": [
+      [
+       "psv_list.csv",
+       "PSV-103A,V-103,1,469 kPa(g),process,P&ID-001 rev C"
+      ],
+      [
+       "vessel_datasheets.txt",
+       "MAWP (hot & corroded): 13.79 barg"
+      ]
+     ]
+    },
+    {
+     "rule": "RATED_FLOW_MARGIN",
+     "tag": "P-101A",
+     "msg": "rated 123 < 110% of normal 120 m3/h",
+     "cite": "SP-MECH-001",
+     "sources": [
+      [
+       "vendor_P-101A.txt",
+       "Rated flow: 542 gpm"
+      ],
+      [
+       "process_datasheet.txt",
+       "P 101A: normal flow 120 m3/h; NPSHa 21.1 ft"
+      ]
+     ]
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,8 @@
+heldout: 60 projects, 221 planted defects, 197 planted look-alikes
+
+  aware    caught  157/221   false flags    0 (0 on look-alikes)
+           missed by rule: {'OP_TOO_CLOSE_TO_SET': 17, 'PSV_SET_OVER_MAWP': 13, 'STALE_REF': 6, 'PSV_ADDL_OVER_105': 16, 'PIPE_CLASS_DERATED': 3, 'XFMR_OVER_ONAF': 9}
+  literal  caught   44/221   false flags  130 (71 on look-alikes)
+           missed by rule: {'STALE_REF': 22, 'MOTOR_MARGIN': 27, 'OP_TOO_CLOSE_TO_SET': 16, 'RATED_FLOW_MARGIN': 22, 'NPSH_MARGIN': 31, 'PSV_SET_OVER_MAWP': 13, 'PIPE_CLASS_DERATED': 21, 'PSV_ADDL_OVER_105': 16, 'XFMR_OVER_ONAF': 9}
+
+  aware: 237 items reported as UNREAD (needs a person) instead of passing silently

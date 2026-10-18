@@ -1,0 +1,7 @@
+heldout: 60 projects, 221 planted defects, 197 planted look-alikes
+
+  aware    caught  221/221   false flags    1 (1 on look-alikes)
+  literal  caught   98/221   false flags  227 (154 on look-alikes)
+           missed by rule: {'STALE_REF': 22, 'RATED_FLOW_MARGIN': 22, 'MOTOR_MARGIN': 27, 'PIPE_CLASS_DERATED': 21, 'NPSH_MARGIN': 31}
+
+  aware: 0 items reported as UNREAD (needs a person) instead of passing silently

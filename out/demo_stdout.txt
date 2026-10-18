@@ -1,0 +1,25 @@
+project 9004 (held-out): 11 documents, 5 planted defects
+
+AWARE FLAGS
+  OP_TOO_CLOSE_TO_SET  V-101          operating 263 psig > 90% of lowest set 275 psig
+                       rule: project spec SP-MECH-001 (operating margin)   [planted]
+                         source: ('process_datasheet.txt', 'V101: normal operating pressure 18.13 barg')
+                         source: ('psv_list.csv', 'PSV 101A,275 psig,V-101,P&ID-001 rev C,process')
+  PSV_SET_OVER_MAWP    PSV-103A       set 598 psig > 100% of MAWP 555 psig (V-103)
+                       rule: ASME VIII-1 UG-134(a) (2019 ed.; Section XIII in 2021+)   [planted]
+                         source: ('psv_list.csv', 'PSV103A,42.04 kg/cm2(g),V 103,P&ID-001 rev B,process')
+                         source: ('vessel_datasheets.txt', 'Item: V-103 | Design pressure (barg): 36.20 | Max. allowable working pressure (barg): 38.27 | Design temp (degF): 250')
+  PIPE_CLASS_DERATED   4"-P-1003-B1   design 606 psig > Class 300 rating 570 psig at 601 °F
+                       rule: ASME B16.5-2020 Table 2-1.1 (Group 1.1)   [planted]
+                         source: ('line_list.csv', '4"-P-1003-B1,606 psig,316 °C,B1')
+  NPSH_MARGIN          P-101A         NPSHa 21.0 ft vs NPSHr 20.7 ft
+                       rule: SP-MECH-001 NPSH margin   [planted]
+                         source: ('process_datasheet.txt', 'P-101A: normal flow 280 m3/h; NPSHa 21.0 ft')
+                         source: ('vendor_P-101A.txt', 'NPSHr: 20.7 ft')
+  STALE_REF            PSV-103A       references P&ID-001 rev B, current is rev C
+                       rule: document register   [planted]
+                         source: ('psv_list.csv', 'PSV103A,42.04 kg/cm2(g),V 103,P&ID-001 rev B,process')
+
+LITERAL RULES (same documents)
+  caught 2/5   false flags: [('CODE_EDITION', 'P-101A'), ('CODE_EDITION', 'P-102A'), ('PSV_SET_OVER_MAWP', 'PSV-102A')]
+  look-alikes planted here: [('SET_ABOVE_DESIGN_BELOW_MAWP', 'PSV-102A'), ('HOT_LINE_WITHIN_RATING', '4"-P-1001-A1')]

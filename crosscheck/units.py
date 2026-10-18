@@ -13,7 +13,7 @@ BAR_PSI = 14.5038
 _NUM = r"(-?\d[\d,]*\.?\d*)"
 _Q = re.compile(_NUM + r"\s*(" + "|".join([
     r"psi\s*\(?g\)?", r"psig", r"psi\s*\(?a\)?", r"psia", r"barg", r"bar\s*\(?g\)?", r"bara", r"bar\s*\(?a\)?",
-    r"kpa\s*\(?g\)?", r"kpag", r"kpa\s*\(?a\)?", r"kpaa", r"mpa\s*\(?g\)?", r"mpag",
+    r"kg/cm2\s*\(?g\)?", r"kpa\s*\(?g\)?", r"kpag", r"kpa\s*\(?a\)?", r"kpaa", r"mpa\s*\(?g\)?", r"mpag",
     r"°\s*f", r"deg\s*f", r"°\s*c", r"deg\s*c", r"f\b", r"c\b",
     r"mva", r"kva", r"kw", r"hp", r"m3/h", r"m³/h", r"gpm", r"ft", r"m\b",
 ]) + r")", re.I)
@@ -32,6 +32,7 @@ def parse(text: str):
         "barg": (lambda x: x * BAR_PSI, "pressure"), "bara": (lambda x: x * BAR_PSI - ATM_PSI, "pressure"),
         "kpag": (lambda x: x * BAR_PSI / 100, "pressure"), "kpaa": (lambda x: x * BAR_PSI / 100 - ATM_PSI, "pressure"),
         "mpag": (lambda x: x * BAR_PSI * 10, "pressure"),
+        "kg/cm2g": (lambda x: x * 14.2233, "pressure"),
         "degf": (lambda x: x, "temp"), "f": (lambda x: x, "temp"),
         "degc": (lambda x: x * 9 / 5 + 32, "temp"), "c": (lambda x: x * 9 / 5 + 32, "temp"),
         "mva": (lambda x: x * 1000, "kva"), "kva": (lambda x: x, "kva"),

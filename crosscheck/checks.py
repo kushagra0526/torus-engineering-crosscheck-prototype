@@ -28,23 +28,34 @@ def extract(docs, naive=False):
         return r if r else (None,)
 
     M = {"vessel": defaultdict(dict), "psv": {}, "line": {}, "pump": defaultdict(dict), "xfmr": {}, "load": [], "spec": {}, "rev": {}}
-    # vessel datasheets: blocks start at a tag line
+    # vessel datasheets: blocks start at a tag line; one-line "Item: tag | key (unit): value | ..." rows too
     cur = None
     for ln in docs["vessel_datasheets.txt"].splitlines()[1:]:
-        if re.match(r"\s*(Tag No\.|VESSEL)", ln):
+        src = ("vessel_datasheets.txt", ln.strip())
+        if "|" in ln:
+            cur = norm_tag(ln.split("|")[0])
+            pairs = []
+            for part in ln.split("|")[1:]:
+                m = re.match(r"\s*(.*?)\s*\(([^)]+)\)\s*:\s*([\d.,]+)", part)   # unit in the key, value bare
+                if m:
+                    pairs.append((m.group(1).lower(), q(f"{m.group(3)} {m.group(2)}")))
+        elif re.match(r"\s*(Tag No\.|VESSEL)", ln):
             cur = norm_tag(ln)
             continue
-        if cur and ":" in ln or (cur and "...." in ln):
-            key = ln.lower()
-            val = q(ln)
+        elif cur and (":" in ln or "...." in ln):
+            pairs = [(ln.lower(), q(ln))]
+        else:
+            cur = None if not ln.strip() else cur
+            continue
+        for key, val in pairs:
             if val[0] is None:
                 continue
-            src = ("vessel_datasheets.txt", ln.strip())
-            if "maw" in key.replace(".", ""):
+            k = key.replace(".", "")
+            if "maw" in k or "max allowable" in k:
                 M["vessel"][cur]["mawp"] = (val[0], src)
-            elif "press" in key:
+            elif "press" in k:
                 M["vessel"][cur]["dp"] = (val[0], src)
-            elif "temp" in key:
+            elif "temp" in k:
                 M["vessel"][cur]["dt"] = (val[0], src)
     for ln in docs["process_datasheet.txt"].splitlines()[1:]:
         tag = norm_tag(ln)
@@ -54,9 +65,9 @@ def extract(docs, naive=False):
         if "normal flow" in ln:
             M["pump"][tag]["flow"] = (q(ln.split("flow")[1])[0], src)
             M["pump"][tag]["npsha"] = (float(re.search(r"NPSHa\s*([\d.]+)", ln).group(1)), src)
-    for row in list(csv.reader(docs["psv_list.csv"].splitlines()))[1:]:
-        tag, prot, sp, service, ref = row
-        ln = ",".join(row)
+    for row in csv.DictReader(docs["psv_list.csv"].splitlines()):   # by header name, not position
+        tag, prot, sp, service, ref = row["Tag"], row["Protects"], row["Set pressure"], row["Service"], row["Reference"]
+        ln = ",".join(row.values())
         M["psv"][norm_tag(tag)] = {"vessel": norm_tag(prot), "sp": (q(sp)[0], ("psv_list.csv", ln)),
                                    "service": service.strip(), "ref": ref.strip()}
     for row in list(csv.reader(docs["line_list.csv"].splitlines()))[1:]:
@@ -87,7 +98,11 @@ def extract(docs, naive=False):
         tag = norm_tag(ln)
         m = re.search(r"([\d,]+)/([\d,]+) kVA", ln)
         mva = re.findall(r"[\d.]+ MVA", ln)
-        if m:
+        paren = re.findall(r"([\d,]+)\s*kVA\s*\((ONAN|ONAF)\)", ln)
+        if len(paren) == 2:
+            d = {k: float(v.replace(",", "")) for v, k in paren}
+            onan, onaf = d["ONAN"], d["ONAF"]
+        elif m:
             onan, onaf = float(m.group(1).replace(",", "")), float(m.group(2).replace(",", ""))
         elif len(mva) == 2:
             onan, onaf = (q(x)[0] for x in mva)

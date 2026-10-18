@@ -1,0 +1,177 @@
+{
+ "split": "dev",
+ "projects": 40,
+ "planted": 137,
+ "lookalikes": 137,
+ "aware_unread_items": 0,
+ "results": {
+  "aware": {
+   "caught": 137,
+   "missed": 0,
+   "false": 0,
+   "false_on_lookalike": 0,
+   "by_rule": {
+    "PSV_ADDL_OVER_105": 14,
+    "STALE_REF": 18,
+    "XFMR_OVER_ONAF": 18,
+    "OP_TOO_CLOSE_TO_SET": 11,
+    "RATED_FLOW_MARGIN": 15,
+    "MOTOR_MARGIN": 13,
+    "PSV_SET_OVER_MAWP": 13,
+    "CODE_EDITION": 12,
+    "NPSH_MARGIN": 10,
+    "PIPE_CLASS_DERATED": 13
+   },
+   "miss_by_rule": {}
+  },
+  "literal": {
+   "caught": 68,
+   "missed": 69,
+   "false": 142,
+   "false_on_lookalike": 101,
+   "by_rule": {
+    "PSV_ADDL_OVER_105": 14,
+    "XFMR_OVER_ONAF": 18,
+    "OP_TOO_CLOSE_TO_SET": 11,
+    "CODE_EDITION": 12,
+    "PSV_SET_OVER_MAWP": 13
+   },
+   "miss_by_rule": {
+    "STALE_REF": 18,
+    "RATED_FLOW_MARGIN": 15,
+    "MOTOR_MARGIN": 13,
+    "NPSH_MARGIN": 10,
+    "PIPE_CLASS_DERATED": 13
+   }
+  }
+ },
+ "examples": [
+  {
+   "seed": 1,
+   "flags": [
+    {
+     "rule": "PSV_ADDL_OVER_105",
+     "tag": "PSV-102B",
+     "msg": "set 176 psig > 105% of MAWP 161 psig (V-102)",
+     "cite": "ASME VIII-1 UG-134(a) (2019 ed.; Section XIII in 2021+)",
+     "sources": [
+      [
+       "psv_list.csv",
+       "PSV102B,V 102,176 psig,process,P&ID-001 rev C"
+      ],
+      [
+       "vessel_datasheets.txt",
+       "M.A.W.P. ........ 161 psig"
+      ]
+     ]
+    },
+    {
+     "rule": "XFMR_OVER_ONAF",
+     "tag": "T-2",
+     "msg": "max demand 3,345 kVA > ONAF 3,125 kVA",
+     "cite": "load list + spec demand factors",
+     "sources": [
+      [
+       "transformers.txt",
+       "T-2: ONAN 2.50 MVA, ONAF 3.125 MVA"
+      ]
+     ]
+    },
+    {
+     "rule": "STALE_REF",
+     "tag": "PSV-103B",
+     "msg": "references P&ID-001 rev B, current is rev C",
+     "cite": "document register",
+     "sources": [
+      [
+       "psv_list.csv",
+       "PSV103B,V-103,400 psig,process,P&ID-001 rev B"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "seed": 2,
+   "flags": [
+    {
+     "rule": "PSV_ADDL_OVER_105",
+     "tag": "PSV-103B",
+     "msg": "set 556 psig > 105% of MAWP 512 psig (V-103)",
+     "cite": "ASME VIII-1 UG-134(a) (2019 ed.; Section XIII in 2021+)",
+     "sources": [
+      [
+       "psv_list.csv",
+       "PSV103B,V 103,556 psig,process,P&ID-001 rev B"
+      ],
+      [
+       "vessel_datasheets.txt",
+       "MAWP (hot & corroded): 35.30 barg"
+      ]
+     ]
+    },
+    {
+     "rule": "STALE_REF",
+     "tag": "PSV-103B",
+     "msg": "references P&ID-001 rev B, current is rev C",
+     "cite": "document register",
+     "sources": [
+      [
+       "psv_list.csv",
+       "PSV103B,V 103,556 psig,process,P&ID-001 rev B"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "seed": 3,
+   "flags": [
+    {
+     "rule": "OP_TOO_CLOSE_TO_SET",
+     "tag": "V-102",
+     "msg": "operating 237 psig > 90% of lowest set 250 psig",
+     "cite": "project spec SP-MECH-001 (operating margin)",
+     "sources": [
+      [
+       "process_datasheet.txt",
+       "V 102: normal operating pressure 237 psig"
+      ],
+      [
+       "psv_list.csv",
+       "PSV-102A,V102,250 psig,process,P&ID-001 rev C"
+      ]
+     ]
+    },
+    {
+     "rule": "RATED_FLOW_MARGIN",
+     "tag": "P-102A",
+     "msg": "rated 251 < 110% of normal 240 m3/h",
+     "cite": "SP-MECH-001",
+     "sources": [
+      [
+       "vendor_P-102A.txt",
+       "Rated flow: 1105 gpm"
+      ],
+      [
+       "process_datasheet.txt",
+       "P102A: normal flow 240 m3/h; NPSHa 39.1 ft"
+      ]
+     ]
+    },
+    {
+     "rule": "STALE_REF",
+     "tag": "PSV-103B",
+     "msg": "references P&ID-001 rev B, current is rev C",
+     "cite": "document register",
+     "sources": [
+      [
+       "psv_list.csv",
+       "PSV-103B,V103,150 psig,process,P&ID-001 rev B"
+      ]
+     ]
+    }
+   ]
+  }
+ ]
+}
